@@ -1,4 +1,5 @@
 import sys
+import os
 import random
 # Aggiungiamo la root path al path di sistema se necessario, ma di solito l'esecuzione da main.py funziona.
 from models import mondo
@@ -14,7 +15,25 @@ class Gioco:
         self.posizione_idx = 0 
         self.game_over = False
 
+    def _clear(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+    def _pausa(self, messaggio="\nPremi Invio per continuare..."):
+        input(messaggio)
+        self._clear()
+
+    def _pausa_e_stanza(self, stanza, messaggio="\nPremi Invio per continuare..."):
+        self._pausa(messaggio)
+        self._mostra_stanza(stanza)
+
+    def _mostra_stanza(self, stanza):
+        print("\n" + "="*40)
+        print(f"LUOGO: {stanza.nome} {self.posizione_idx + 1}")
+        print("-" * 40)
+        print(stanza.descrizione)
+
     def setup(self):
+        self._clear()
         print("Benvenuto in Dungeon Game!")
         try:
             with open("README.md", "r", encoding="utf-8") as f:
@@ -25,7 +44,7 @@ class Gioco:
         nome = input("Inserisci il nome del tuo eroe: ")
         self.giocatore = Giocatore(nome)
         print(f"Ciao {self.giocatore.nome}! Inizia la tua avventura...")
-        input("Premi Invio per continuare...")
+        self._pausa()
 
     def parse_item(self, item_description):
         """Traduce la stringa dell'item di mondo.py in un oggetto di gioco."""
@@ -48,17 +67,17 @@ class Gioco:
         while not self.game_over and self.giocatore.e_vivo():
             # Ottieni la stanza corrente
             stanza = self.mappa.lista_stanze[self.posizione_idx]
-            
-            print("\n" + "="*40)
-            print(f"LUOGO: {stanza.nome}")
-            print("-" * 40)
-            print(stanza.descrizione)
+            self._clear()
+            self._mostra_stanza(stanza)
+
             
             # Evento Mostro Casuale
             if random.random() < 0.4: # 40% probabilità incontro
                 input("\nQualcosa si muove nell'ombra... (Premi Invio)")
                 mostro = Mostro("Guardiano Oscuro", hp=random.randint(20, 40), attacco=random.randint(4, 8))
                 vittoria = combattimento(self.giocatore, mostro)
+                self._mostra_stanza(stanza)
+                self._pausa_e_stanza(stanza)
                 
                 if not vittoria and not self.giocatore.e_vivo():
                     self.game_over = True
@@ -99,6 +118,7 @@ class Gioco:
                         self.game_over = True
                 else:
                     print("Da quella parte c'è solo un muro o un vicolo cieco.")
+                    self._pausa_e_stanza(stanza)
             
             elif scelta == 'p':
                 if oggetto_stanza:
@@ -106,11 +126,15 @@ class Gioco:
                     print(f"Hai preso: {oggetto_stanza.nome}")
                     # Rimuoviamo l'oggetto dalla stanza (mappa è in memoria)
                     stanza.item = "Nessuno"
+                    self._pausa_e_stanza(stanza)
                 else:
+                    self._mostra_stanza(stanza)
                     print("Non c'è nulla da prendere qui.")
+                    self._pausa_e_stanza(stanza)
             
             elif scelta == 'a':
                 print("Non c'è nessun nemico qui al momento. Tieni la spada pronta!")
+                self._pausa_e_stanza(stanza)
 
             elif scelta == 'i':
                 print("\n=== INVENTARIO ===")
@@ -128,6 +152,7 @@ class Gioco:
                             consumato = ogg.usa(self.giocatore)
                             if consumato and isinstance(ogg, Pozione):
                                 self.giocatore.inventario.pop(idx)
+                self._pausa_e_stanza(stanza)
 
             elif scelta == 'q':
                 print("Abbandoni l'avventura.")
@@ -135,5 +160,6 @@ class Gioco:
             
             else:
                 print("Comando non valido.")
+                self._pausa_e_stanza(stanza)
 
         print("Grazie per aver giocato!")

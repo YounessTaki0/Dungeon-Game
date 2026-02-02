@@ -1,5 +1,5 @@
 import random
-
+import os
 def combattimento(giocatore, mostro):
     """
     Gestisce un ciclo di combattimento tra giocatore e mostro.
@@ -61,6 +61,7 @@ def combattimento(giocatore, mostro):
             print("Non capisco questo comando. Perdi il turno per esitazione!")
 
         if not mostro.e_vivo():
+            os.system("clear")
             print(f"HAI SCONFITTO {mostro.nome}!")
             return True
 
