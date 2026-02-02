@@ -23,6 +23,50 @@ class Stanze():
         for i in self.lista_stanze:
             s += str(i)
         return s
+    
+    def mostra_dungeon(self):
+        if not self.lista_stanze:
+            return "Dungeon vuoto."
+
+        titles = []
+        for idx, stanza in enumerate(self.lista_stanze, start=1):
+            nome = f"{idx}. {stanza.nome}"
+            item = f"Item: {stanza.item}"
+            direzione = f"Direzione: {stanza.direzione}"
+            titles.append((nome, item, direzione))
+
+        max_len = max(
+            len(line)
+            for stanza_lines in titles
+            for line in stanza_lines
+        )
+        box_width = max_len + 2  # padding
+        horizontal = "+" + "-" * box_width + "+"
+
+        cards = []
+        for nome, item, direzione in titles:
+            card = [
+                horizontal,
+                "| " + nome.ljust(box_width - 1) + "|",
+                "| " + item.ljust(box_width - 1) + "|",
+                "| " + direzione.ljust(box_width - 1) + "|",
+                horizontal,
+            ]
+            cards.append(card)
+
+        cols = 2
+        gap = "  "
+        rows = []
+        for i in range(0, len(cards), cols):
+            chunk = cards[i:i + cols]
+            height = len(chunk[0])
+            for line_idx in range(height):
+                rows.append(gap.join(card[line_idx] for card in chunk))
+            if i + cols < len(cards):
+                rows.append("")
+
+        return "\n".join(rows)
+
 
 room = Stanza(
     "room",
@@ -42,7 +86,7 @@ room3 = Stanza(
     "room3",
     "Hot and oppressive. The heat here is almost solid. Great iron crucibles hang from the ceiling by rusted chains, still filled with molten metal that casts long, distorted shadows. Cracked anvils and shattered weapons lie scattered everywhere, witnesses to a hasty flight or a sudden fit of rage.",
     "Damage Potion (+5 HP/hit)",
-    "est"
+    "sud"
 )
 
 room4 = Stanza(
@@ -56,7 +100,7 @@ room5 = Stanza(
     "room5",
     "Macabre and solemn. The walls are not made of stone, but of skulls and bones perfectly interlocked to form hypnotic geometric patterns. At the center of the room, a single throne of bone faces away from the entrance. There is no dust here; everything is clean, polished, and terrifyingly orderly.",
     "Iron Sword (5 HP)",
-    "nord"
+    "est"
 )
 
 room6 = Stanza(
@@ -77,7 +121,7 @@ room8 = Stanza(
     "room8",
     "Claustrophobic and desperate. A tiny room where light filters in only from a grate in the ceiling, far too high to be reached. The walls are covered in notches carved into the rock and desperate graffiti. In a corner, a rotted straw mattress and a chipped wooden bowl are the only remnants of a life spent in isolation.",
     "Iron Sword (5 HP)",
-    "ovest"
+    "sud"
 )
 
 room9 = Stanza(
@@ -91,9 +135,9 @@ room10 = Stanza(
     "room10",
     "Steampunk and rhythmic. The floor is composed of enormous cogwheels that turn with an incessant metallic ticking. Jets of scalding steam burst at regular intervals from pipes running along the walls. It is a room in constant motion, where one false step could lead into the teeth of a hydraulic press.",
     "Health Potion (5 HP)",
-    "nord"
+    "ovest"
 )
 
 mappa = Stanze()
 mappa.aggiungi_stanze([room, room2, room3, room4, room5, room6, room7, room8, room9, room10])
-print(mappa)
+print(mappa.mostra_dungeon())
