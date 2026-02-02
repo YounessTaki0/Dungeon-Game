@@ -8,7 +8,7 @@ class Stanza:
         self.direzione = direzione
 
     def __str__(self):
-        return f"\n{self.nome}, {self.descrizione}, {self.item}, {self.direzione}\n"
+        return f"\nName: {self.nome}\nDescription: {self.descrizione}\nItem: {self.item}\nDirection: {self.direzione}\n"
 
 class Stanze():
     def __init__(self):
