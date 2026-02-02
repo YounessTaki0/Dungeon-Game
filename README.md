@@ -1,1 +1,3 @@
-Questo progetto è un progetto
+STORIA VIDEOGIOCO:
+
+In Echoes of the Hollow Crown, giocherai nei panni di Kaelen Thorne, un emarginato dotato del potere proibito di assorbire i ricordi residui dagli ambienti. Quando il regno di Oakhaven sprofonda improvvisamente nel sottosuolo a causa di un patto oscuro stretto dal folle Re Alaric, Kaelen deve addentrarsi nel Dungeon del Rimpianto per recuperare i frammenti della Corona Cava e spezzare la maledizione. Attraverso stanze che riflettono la psiche distrutta del sovrano, Kaelen dovrà decidere se purificare l'anima del regno o cedere alla corruzione che il suo stesso potere gli infligge, rischiando di diventare l'erede di un trono fatto di ombre e cenere.
